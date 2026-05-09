@@ -1,0 +1,13 @@
+format=yuv420p,
+drawbox=x=0:y=0:w=iw:h=ih:color=0xE8EEF7:t=fill,
+drawbox=x=0:y=0:w=iw:h=ih:color=0xC9D8EA@0.28:t=fill,
+drawbox=x='-500+220*t':y=0:w=860:h=ih:color=0xFFFFFF@0.18:t=fill,
+drawbox=x=140:y=118:w=2280:h=1360:color=0xF8FBFF@0.28:t=4,
+drawbox=x=1850:y=180:w=410:h=1160:color=0xFFFFFF@0.18:t=fill,
+drawbox=x=1890:y=220:w=330:h=1080:color=0xC6D4E8@0.22:t=3,
+drawbox=x=0:y=1310:w=iw:h=290:color=0xDCE6F4@0.42:t=fill,
+drawbox=x='1930+15*sin(t*1.7)':y='260+18*sin(t*1.2)':w=250:h=420:color=0xFFFFFF@0.16:t=fill,
+drawbox=x='1960+10*sin(t*1.4)':y='720+16*sin(t*1.1)':w=190:h=190:color=0xEFF5FD@0.22:t=fill,
+drawbox=x='1940+14*sin(t*1.5)':y='1010+20*sin(t*1.0)':w=230:h=220:color=0xD4E0F1@0.20:t=fill,
+fade=t=in:st=0:d=0.55,
+fade=t=out:st=5.35:d=0.65

@@ -1,0 +1,21 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 2560
+PlayResY: 1600
+WrapStyle: 2
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name,Fontname,Fontsize,PrimaryColour,SecondaryColour,OutlineColour,BackColour,Bold,Italic,Underline,StrikeOut,ScaleX,ScaleY,Spacing,Angle,BorderStyle,Outline,Shadow,Alignment,MarginL,MarginR,MarginV,Encoding
+Style: Small,Microsoft YaHei,34,&H00E8EEF7,&H000000FF,&H006D839E,&H40000000,0,0,0,0,100,100,0,0,1,1.4,0,7,150,150,140,1
+Style: Title,SimHei,162,&H00FFFFFF,&H000000FF,&H004B6280,&H32000000,-1,0,0,0,100,100,0,0,1,2.4,0,7,150,150,380,1
+Style: Mid,Microsoft YaHei,54,&H00F0F5FB,&H000000FF,&H00667893,&H28000000,-1,0,0,0,100,100,0,0,1,1.6,0,7,160,160,620,1
+Style: Footer,Microsoft YaHei,46,&H00E4EDF8,&H000000FF,&H00667893,&H20000000,0,0,0,0,100,100,0,0,1,1.4,0,7,160,160,1320,1
+
+[Events]
+Format: Layer,Start,End,Style,Name,MarginL,MarginR,MarginV,Effect,Text
+Dialogue: 0,0:00:00.10,0:00:05.80,Small,,0,0,0,,FFXIV / COLD AIR / WHITE NOISE
+Dialogue: 0,0:00:00.25,0:00:05.60,Title,,0,0,0,,羲会梦到电子DK嘛
+Dialogue: 0,0:00:00.60,0:00:05.60,Mid,,0,0,0,,游戏实况 / 工具分享 / 国服价格百科
+Dialogue: 0,0:00:01.00,0:00:05.60,Small,,0,0,0,,缘之空气质参考版片头
+Dialogue: 0,0:00:01.25,0:00:05.60,Footer,,0,0,0,,视频开始

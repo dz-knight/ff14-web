@@ -1,0 +1,23 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 2560
+PlayResY: 1600
+WrapStyle: 2
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name,Fontname,Fontsize,PrimaryColour,SecondaryColour,OutlineColour,BackColour,Bold,Italic,Underline,StrikeOut,ScaleX,ScaleY,Spacing,Angle,BorderStyle,Outline,Shadow,Alignment,MarginL,MarginR,MarginV,Encoding
+Style: Small,Microsoft YaHei,34,&H00DBE7F6,&H000000FF,&H00576E89,&H50000000,0,0,0,0,100,100,0,0,1,1.4,0,7,320,320,200,1
+Style: Title,SimHei,134,&H00FFFFFF,&H000000FF,&H00344960,&H38000000,-1,0,0,0,100,100,0,0,1,2.2,0,7,320,320,440,1
+Style: Mid,Microsoft YaHei,48,&H00D9E9FA,&H000000FF,&H004A617E,&H26000000,0,0,0,0,100,100,0,0,1,1.6,0,7,320,320,720,1
+Style: Footer,Microsoft YaHei,56,&H00F1F8FF,&H000000FF,&H004A617E,&H20000000,0,0,0,0,100,100,0,0,1,1.4,0,7,320,320,1010,1
+Style: Side,Microsoft YaHei,30,&H00AFC4DD,&H000000FF,&H003C4E65,&H20000000,0,0,0,0,100,100,0,0,1,1.2,0,9,0,410,250,1
+
+[Events]
+Format: Layer,Start,End,Style,Name,MarginL,MarginR,MarginV,Effect,Text
+Dialogue: 0,0:00:00.10,0:00:06.70,Small,,0,0,0,,CAMERA READY / END CARD
+Dialogue: 0,0:00:00.25,0:00:06.70,Title,,0,0,0,,感谢看到这里
+Dialogue: 0,0:00:00.55,0:00:06.70,Mid,,0,0,0,,羲会梦到电子DK嘛
+Dialogue: 0,0:00:00.95,0:00:06.70,Mid,,0,0,0,,如果这期内容有用，欢迎一键三连 / 评论 / 关注
+Dialogue: 0,0:00:01.20,0:00:06.70,Footer,,0,0,0,,下期见
+Dialogue: 0,0:00:01.35,0:00:06.70,Side,,0,0,0,,夏洛特结尾气质参考版 / 快门感收尾
