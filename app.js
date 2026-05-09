@@ -804,7 +804,7 @@ function buildResolvedAliasItems(keyword, resolved) {
       Name_ja: "",
       Icon: resolved.icon || "",
       LevelItem: 0,
-      ItemUICategory: { Name: "别名/Wiki -> Universalis 英文站兜底解析" },
+      ItemUICategory: { Name: "双语映射" },
     }
   ];
 }

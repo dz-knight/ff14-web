@@ -1,22 +1,6 @@
 function staticModeInit() {
-  const run = async () => {
-    try {
-      await loadItemMapping();
-      const cnWorldCount = Array.isArray(state.dataCenters)
-        ? state.dataCenters.reduce((sum, entry) => sum + entry.worlds.length, 0)
-        : 0;
-      setBootStatus(`Static mode ready: ${cnWorldCount} worlds, ${state.itemMappingEntries?.length || 0} mapping rows`);
-    } catch (error) {
-      console.error(error);
-      setBootStatus("Static mode failed to load item mapping");
-    }
-  };
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", run, { once: true });
-  } else {
-    run();
-  }
+  // The main app bootstrap already loads the item mapping.
+  // Keep static overrides side-effect free to avoid duplicate JSON fetches.
 }
 
 async function performSearch(keyword, { replace = false } = {}) {
@@ -25,7 +9,7 @@ async function performSearch(keyword, { replace = false } = {}) {
   }
 
   dom.searchButton.disabled = true;
-  dom.searchButton.textContent = "Search";
+  dom.searchButton.textContent = "搜索";
   setLoadingState(keyword);
 
   try {
@@ -51,8 +35,8 @@ async function performSearch(keyword, { replace = false } = {}) {
       const mappedQuestResults = forcedQuestResults.map((entry) => ({
         type: "quest",
         id: entry.ID,
-        name: entry.Name || entry.Name_en || `Quest #${entry.ID}`,
-        subtitle: `${entry.JournalGenre?.Name || "Quest"} / Lv.${entry.ClassJobLevel0 || 0} / ${entry.Name_en || "No English name"}`,
+        name: entry.Name || entry.Name_en || `任务 #${entry.ID}`,
+        subtitle: `${entry.JournalGenre?.Name || "任务"} / 等级 ${entry.ClassJobLevel0 || 0} / ${entry.Name_en || "无英文名"}`,
         icon: entry.Icon,
         raw: entry,
       }));
@@ -62,7 +46,7 @@ async function performSearch(keyword, { replace = false } = {}) {
         return;
       }
       dom.searchInput.value = mappedQuestResults[0].name;
-      saveSearchHistory(`quest:${mappedQuestResults[0].name}`);
+      saveSearchHistory(`任务:${mappedQuestResults[0].name}`);
       await loadQuestPage(mappedQuestResults[0].id, { replace });
       return;
     }
@@ -79,7 +63,7 @@ async function performSearch(keyword, { replace = false } = {}) {
     if (!preferred || !preferred.shouldAutoOpen) {
       dom.searchInput.value = keyword;
       saveSearchHistory(keyword);
-      setBootStatus(`Found ${results.length} related results`);
+      setBootStatus(`找到 ${results.length} 条相关结果`);
       renderAmbiguousSearchResult(keyword, results);
       return;
     }
@@ -101,7 +85,7 @@ async function performSearch(keyword, { replace = false } = {}) {
     renderLoadError(error);
   } finally {
     dom.searchButton.disabled = false;
-    dom.searchButton.textContent = "Search";
+    dom.searchButton.textContent = "搜索";
   }
 }
 
@@ -156,7 +140,7 @@ async function tryResolveAmbiguousViaWiki(keyword) {
     type: "wiki",
     id: 0,
     name: query,
-    subtitle: "Open CN Wiki search in a new tab",
+    subtitle: "在新标签页打开国服 Wiki 搜索",
     icon: "",
     raw: {
       wikiUrl: buildWikiSearchUrl(query),
@@ -179,19 +163,19 @@ function renderNoSearchResult(keyword) {
   const wikiUrl = buildWikiSearchUrl(keyword);
   const markup = `
     <div class="notice notice--warn">
-      No exact result was found for "${safeKeyword}".
-      Try the full Chinese name, the English name, or open CN Wiki search directly.
+      没有找到“${safeKeyword}”的精确结果。
+      可以尝试完整中文名、英文名，或直接打开国服 Wiki 搜索。
     </div>
     <div class="link-row">
-      ${renderExternalButton(wikiUrl, "Open CN Wiki Search")}
+      ${renderExternalButton(wikiUrl, "打开国服 Wiki 搜索")}
     </div>
   `;
-  dom.itemOverview.innerHTML = wrapCard("Search Result", "No Direct Match", markup);
-  dom.marketOverview.innerHTML = wrapCard("Details", "No Data", markup);
-  dom.obtainPanel.innerHTML = wrapCard("How To Obtain", "No Data", markup);
-  dom.craftPanel.innerHTML = wrapCard("Crafting", "No Data", markup);
-  dom.usagePanel.innerHTML = wrapCard("Usage", "No Data", markup);
-  dom.priceTableBody.innerHTML = `<tr><td colspan="7" class="table-empty">No market data</td></tr>`;
+  dom.itemOverview.innerHTML = wrapCard("搜索结果", "未找到精确匹配", markup);
+  dom.marketOverview.innerHTML = wrapCard("详情面板", "暂无数据", markup);
+  dom.obtainPanel.innerHTML = wrapCard("获取方式", "暂无数据", markup);
+  dom.craftPanel.innerHTML = wrapCard("制作配方", "暂无数据", markup);
+  dom.usagePanel.innerHTML = wrapCard("用途", "暂无数据", markup);
+  dom.priceTableBody.innerHTML = `<tr><td colspan="7" class="table-empty">暂无市场数据</td></tr>`;
 }
 
 function renderSearchResults(results) {
@@ -209,7 +193,7 @@ function renderSearchResults(results) {
     const icon = node.querySelector(".result-item__icon");
     const name = node.querySelector(".result-item__name");
     const meta = node.querySelector(".result-item__meta");
-    const typeLabel = entry.type === "quest" ? "Quest" : entry.type === "wiki" ? "Wiki" : "Item";
+    const typeLabel = entry.type === "quest" ? "任务" : entry.type === "wiki" ? "Wiki" : "物品";
 
     icon.style.backgroundImage = `url(${toIconUrl(entry.icon)})`;
     name.textContent = entry.name;
@@ -237,7 +221,7 @@ function renderSearchResults(results) {
 function renderAmbiguousSearchResult(keyword, results) {
   const topResults = results.slice(0, 8);
   const itemsMarkup = topResults.map((entry) => {
-    const typeLabel = entry.type === "quest" ? "Quest" : entry.type === "wiki" ? "Wiki" : "Item";
+    const typeLabel = entry.type === "quest" ? "任务" : entry.type === "wiki" ? "Wiki" : "物品";
     const nameMarkup = entry.type === "wiki"
       ? `<button type="button" class="link-button" data-wiki-search="${escapeHtml(entry.raw?.wikiUrl || entry.name)}">${escapeHtml(entry.name)}</button>`
       : (renderRouteLink(entry.id, entry.name, entry.type === "quest" ? "quest" : "item") || escapeHtml(entry.name));
@@ -251,23 +235,23 @@ function renderAmbiguousSearchResult(keyword, results) {
 
   const markup = `
     <div class="notice notice--soft">
-      Multiple related results were found for "${escapeHtml(keyword)}". Select a candidate below or open CN Wiki search.
+      “${escapeHtml(keyword)}”命中了多个相关结果。请先从下方候选中选择，或直接打开国服 Wiki 搜索。
     </div>
     <div class="subsection">
-      <h3 class="subsection__title">Candidates</h3>
+      <h3 class="subsection__title">候选条目</h3>
       <div class="ingredient-list">${itemsMarkup}</div>
     </div>
     <div class="link-row">
-      ${renderExternalButton(buildWikiSearchUrl(keyword), "Open CN Wiki Search")}
+      ${renderExternalButton(buildWikiSearchUrl(keyword), "打开国服 Wiki 搜索")}
     </div>
   `;
 
-  dom.itemOverview.innerHTML = wrapCard("Search Result", "Need Confirmation", markup);
-  dom.marketOverview.innerHTML = wrapCard("Details", "Waiting For Selection", `<div class="notice notice--soft">Choose an item from the candidate list or continue in CN Wiki.</div>`);
-  dom.obtainPanel.innerHTML = wrapCard("How To Obtain", "Waiting For Selection", `<div class="notice notice--soft">Select an exact item first.</div>`);
-  dom.craftPanel.innerHTML = wrapCard("Crafting", "Waiting For Selection", `<div class="notice notice--soft">Select an exact item first.</div>`);
-  dom.usagePanel.innerHTML = wrapCard("Usage", "Waiting For Selection", `<div class="notice notice--soft">Select an exact item first.</div>`);
-  dom.priceTableBody.innerHTML = `<tr><td colspan="7" class="table-empty">Select an item first</td></tr>`;
+  dom.itemOverview.innerHTML = wrapCard("搜索结果", "需要确认具体条目", markup);
+  dom.marketOverview.innerHTML = wrapCard("详情面板", "等待选择", `<div class="notice notice--soft">请先选择准确条目，或继续在国服 Wiki 中确认。</div>`);
+  dom.obtainPanel.innerHTML = wrapCard("获取方式", "等待选择", `<div class="notice notice--soft">请先选择准确条目。</div>`);
+  dom.craftPanel.innerHTML = wrapCard("制作配方", "等待选择", `<div class="notice notice--soft">请先选择准确条目。</div>`);
+  dom.usagePanel.innerHTML = wrapCard("用途", "等待选择", `<div class="notice notice--soft">请先选择准确条目。</div>`);
+  dom.priceTableBody.innerHTML = `<tr><td colspan="7" class="table-empty">请先选择准确条目</td></tr>`;
 }
 
 staticModeInit();
