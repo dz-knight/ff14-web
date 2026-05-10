@@ -772,6 +772,16 @@ async function searchItems(keyword, { allowDeepFallback = true } = {}) {
 function normalizeSearchKey(value) {
   return String(value || "")
     .normalize("NFKC")
+    .replace(/[壹壱]/g, "一")
+    .replace(/[贰貳弐]/g, "二")
+    .replace(/[叁參参]/g, "三")
+    .replace(/肆/g, "四")
+    .replace(/伍/g, "五")
+    .replace(/[陆陸]/g, "六")
+    .replace(/柒/g, "七")
+    .replace(/捌/g, "八")
+    .replace(/玖/g, "九")
+    .replace(/拾/g, "十")
     .replace(/\s+/g, "")
     .trim()
     .toLowerCase();

@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.0.2 - 2026-05-10
+
+- Fixed Chinese numeral normalization in item search so queries like `神眼魔晶石三型` correctly match mapped names such as `神眼魔晶石叁型`
+- Improved static web search matching for common Chinese variant numerals including `壹贰叁` and `拾`
+
 ## v1.0.1 - 2026-05-08
 
 - Added built-in bilingual tradable item mapping generated from local CN client data and XIVAPI English data
