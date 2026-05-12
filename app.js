@@ -2370,7 +2370,7 @@ function openWikiSearch(query) {
   window.open(target, "_blank", "noopener,noreferrer");
 }
 
-const ITEM_MAPPING_URL = "./data/item_mapping.min.json?v=20260512-v103";
+const ITEM_MAPPING_URL = "./data/item_mapping.min.json?v=20260512-v104";
 
 async function loadItemMapping() {
   try {

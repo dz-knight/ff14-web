@@ -5,6 +5,7 @@
 - Added `全部 / HQ / 非 HQ` market quality filters to the static web version
 - Split market summary and world price table statistics by selected quality mode
 - Kept the static web runtime on the `app.js + static-overrides.js` path while consolidating the latest market-quality overrides into the shared static override layer
+- Bumped static asset version parameters again to force GitHub Pages clients onto the post-fix market-price scripts
 
 ## v1.0.2 - 2026-05-10
 
