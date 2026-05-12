@@ -7,6 +7,7 @@
 - 纯静态文件，无需自建后端
 - 本地双语映射表搜索
 - 直接查询 Universalis 和 XivAPI / CafeMaker
+- 支持 `全部 / HQ / 非 HQ` 价格查看
 - 搜索无结果时跳转国服 Wiki
 
 ## 目录
@@ -36,4 +37,3 @@ http://127.0.0.1:8080
 ## 部署
 
 推荐直接部署到 GitHub Pages。具体步骤见 [DEPLOY.md](./DEPLOY.md)。
-

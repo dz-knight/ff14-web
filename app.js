@@ -22,6 +22,7 @@ const state = {
   dataCenters: [],
   worlds: [],
   worldMap: new Map(),
+  selectedMarketQuality: "all",
   selectedRegion: "全部",
   currentEntity: null,
   currentWorldRows: [],
@@ -1385,24 +1386,18 @@ function buildWorldRowsFromPayload(dataCenter, payload) {
     const listingId = listing.listingID || `${worldId}-${listing.pricePerUnit}-${listing.quantity}`;
     if (!grouped.has(worldId)) {
       grouped.set(worldId, {
-        listingIds: new Set(),
-        minPrice: null,
-        listingCount: 0,
-        unitsForSale: 0,
+        stats: createEmptyQualityStats(),
       });
     }
 
     const record = grouped.get(worldId);
-    if (record.listingIds.has(listingId)) {
+    if (record.stats.all.listingIds.has(listingId)) {
       continue;
     }
 
-    record.listingIds.add(listingId);
-    record.listingCount += 1;
-    record.unitsForSale += Number(listing.quantity || 0);
-    if (record.minPrice == null || Number(listing.pricePerUnit) < record.minPrice) {
-      record.minPrice = Number(listing.pricePerUnit);
-    }
+    const qualityKey = listing.hq ? "hq" : "nq";
+    accumulateQualityStat(record.stats.all, listing, listingId);
+    accumulateQualityStat(record.stats[qualityKey], listing, listingId);
   }
 
   return dataCenter.worlds.map((worldId) => {
@@ -1413,9 +1408,7 @@ function buildWorldRowsFromPayload(dataCenter, payload) {
       worldName: world?.name || `#${worldId}`,
       region: world?.region || dataCenter.region,
       dataCenter: dataCenter.name,
-      minPrice: record?.minPrice ?? null,
-      listingCount: record?.listingCount ?? 0,
-      unitsForSale: record?.unitsForSale ?? 0,
+      qualityStats: record?.stats ? finalizeQualityStats(record.stats) : finalizeQualityStats(createEmptyQualityStats()),
       lastUploadTime: Number(uploadTimes[worldId] || 0) || null,
     };
   });
@@ -1428,11 +1421,76 @@ function buildEmptyWorldRow(dataCenter, worldId) {
     worldName: world?.name || `#${worldId}`,
     region: world?.region || dataCenter.region,
     dataCenter: dataCenter.name,
+    qualityStats: finalizeQualityStats(createEmptyQualityStats()),
+    lastUploadTime: null,
+  };
+}
+
+function createEmptyQualityStats() {
+  return {
+    all: { listingIds: new Set(), minPrice: null, listingCount: 0, unitsForSale: 0 },
+    hq: { listingIds: new Set(), minPrice: null, listingCount: 0, unitsForSale: 0 },
+    nq: { listingIds: new Set(), minPrice: null, listingCount: 0, unitsForSale: 0 },
+  };
+}
+
+function accumulateQualityStat(bucket, listing, listingId) {
+  if (bucket.listingIds.has(listingId)) {
+    return;
+  }
+
+  bucket.listingIds.add(listingId);
+  bucket.listingCount += 1;
+  bucket.unitsForSale += Number(listing.quantity || 0);
+  const price = Number(listing.pricePerUnit);
+  if (bucket.minPrice == null || price < bucket.minPrice) {
+    bucket.minPrice = price;
+  }
+}
+
+function finalizeQualityStats(stats) {
+  return {
+    all: toPublicQualityStat(stats.all),
+    hq: toPublicQualityStat(stats.hq),
+    nq: toPublicQualityStat(stats.nq),
+  };
+}
+
+function toPublicQualityStat(bucket) {
+  return {
+    minPrice: bucket.minPrice,
+    listingCount: bucket.listingCount,
+    unitsForSale: bucket.unitsForSale,
+  };
+}
+
+function getSelectedQualityStat(row) {
+  return row?.qualityStats?.[state.selectedMarketQuality] || row?.qualityStats?.all || {
     minPrice: null,
     listingCount: 0,
     unitsForSale: 0,
-    lastUploadTime: null,
   };
+}
+
+function getQualityOptions(item) {
+  if (item?.CanBeHq) {
+    return [
+      { key: "all", label: "全部" },
+      { key: "hq", label: "HQ" },
+      { key: "nq", label: "非 HQ" },
+    ];
+  }
+  return [{ key: "all", label: "全部" }];
+}
+
+function getMarketModeLabel() {
+  if (state.selectedMarketQuality === "hq") {
+    return "HQ";
+  }
+  if (state.selectedMarketQuality === "nq") {
+    return "非 HQ";
+  }
+  return "全部";
 }
 
 function renderItemOverview(item) {
@@ -1512,15 +1570,22 @@ function renderQuestOverview(quest) {
 }
 
 function renderMarketOverview(item, worldRows) {
-  const rowsWithPrice = worldRows.filter((row) => row.minPrice != null);
+  const rowsWithPrice = worldRows.filter((row) => getSelectedQualityStat(row).minPrice != null);
   const cheapest = rowsWithPrice[0];
   const regionsCovered = new Set(worldRows.map((row) => row.region)).size;
   const listedWorlds = rowsWithPrice.length;
-  const totalListings = rowsWithPrice.reduce((sum, row) => sum + row.listingCount, 0);
-  const totalUnits = rowsWithPrice.reduce((sum, row) => sum + row.unitsForSale, 0);
+  const totalListings = rowsWithPrice.reduce((sum, row) => sum + getSelectedQualityStat(row).listingCount, 0);
+  const totalUnits = rowsWithPrice.reduce((sum, row) => sum + getSelectedQualityStat(row).unitsForSale, 0);
   const regionSummary = summarizeRegions(worldRows);
+  const qualityOptions = getQualityOptions(item);
+  const modeLabel = getMarketModeLabel();
 
   const markup = `
+    <div class="market-quality-row">
+      ${qualityOptions.map((entry) => `
+        <button type="button" class="region-filter${state.selectedMarketQuality === entry.key ? " is-active" : ""}" data-market-quality="${entry.key}">${entry.label}</button>
+      `).join("")}
+    </div>
     <div class="market-overview-grid">
       <div class="metric-card">
         <div class="metric-card__label">全服最低价</div>

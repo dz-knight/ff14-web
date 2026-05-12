@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.0.3 - 2026-05-12
+
+- Added `全部 / HQ / 非 HQ` market quality filters to the static web version
+- Split market summary and world price table statistics by selected quality mode
+- Kept the static web runtime on the `app.js + static-overrides.js` path while consolidating the latest market-quality overrides into the shared static override layer
+
 ## v1.0.2 - 2026-05-10
 
 - Fixed Chinese numeral normalization in item search so queries like `神眼魔晶石三型` correctly match mapped names such as `神眼魔晶石叁型`
