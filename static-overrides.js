@@ -351,12 +351,16 @@ function buildWorldRowsFromPayload(dataCenter, payload) {
   return dataCenter.worlds.map((worldId) => {
     const world = state.worldMap.get(worldId);
     const record = grouped.get(worldId);
+    const qualityStats = record?.stats ? finalizeQualityStats(record.stats) : finalizeQualityStats(createEmptyQualityStats());
     return {
       worldId,
       worldName: world?.name || `#${worldId}`,
       region: world?.region || dataCenter.region,
       dataCenter: dataCenter.name,
-      qualityStats: record?.stats ? finalizeQualityStats(record.stats) : finalizeQualityStats(createEmptyQualityStats()),
+      minPrice: qualityStats.all.minPrice,
+      listingCount: qualityStats.all.listingCount,
+      unitsForSale: qualityStats.all.unitsForSale,
+      qualityStats,
       lastUploadTime: Number(uploadTimes[worldId] || 0) || null,
     };
   });
@@ -369,6 +373,9 @@ function buildEmptyWorldRow(dataCenter, worldId) {
     worldName: world?.name || `#${worldId}`,
     region: world?.region || dataCenter.region,
     dataCenter: dataCenter.name,
+    minPrice: null,
+    listingCount: 0,
+    unitsForSale: 0,
     qualityStats: finalizeQualityStats(createEmptyQualityStats()),
     lastUploadTime: null,
   };
