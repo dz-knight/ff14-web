@@ -4,6 +4,7 @@
 
 - Fixed Chinese numeral normalization in item search so queries like `神眼魔晶石三型` correctly match mapped names such as `神眼魔晶石叁型`
 - Improved static web search matching for common Chinese variant numerals including `壹贰叁` and `拾`
+- Bumped static asset version parameters in `index.html` and `item_mapping.min.json` to force GitHub Pages and browser clients to refresh cached scripts and mapping data
 
 ## v1.0.1 - 2026-05-08
 
