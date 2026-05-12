@@ -406,7 +406,16 @@ function renderMarketOverview(item, worldRows) {
     setActiveMarketQuality("all");
   }
 
-  const rowsWithPrice = worldRows.filter((row) => getSelectedQualityStat(row).minPrice != null);
+  const rowsWithPrice = worldRows
+    .filter((row) => getSelectedQualityStat(row).minPrice != null)
+    .sort((left, right) => {
+      const leftStat = getSelectedQualityStat(left);
+      const rightStat = getSelectedQualityStat(right);
+      if (leftStat.minPrice !== rightStat.minPrice) {
+        return (leftStat.minPrice || Number.MAX_SAFE_INTEGER) - (rightStat.minPrice || Number.MAX_SAFE_INTEGER);
+      }
+      return left.worldName.localeCompare(right.worldName, "zh-CN");
+    });
   const cheapest = rowsWithPrice[0];
   const regionsCovered = new Set(worldRows.map((row) => row.region)).size;
   const listedWorlds = rowsWithPrice.length;
@@ -468,6 +477,18 @@ function renderPriceTable() {
     const matchesRegion = state.selectedRegion === "全部" || row.region === state.selectedRegion;
     const haystack = `${row.region} ${row.dataCenter} ${row.worldName}`.toLowerCase();
     return matchesRegion && (!keyword || haystack.includes(keyword));
+  }).sort((left, right) => {
+    const leftStat = getSelectedQualityStat(left);
+    const rightStat = getSelectedQualityStat(right);
+    const leftMissing = leftStat.minPrice == null ? 1 : 0;
+    const rightMissing = rightStat.minPrice == null ? 1 : 0;
+    if (leftMissing !== rightMissing) {
+      return leftMissing - rightMissing;
+    }
+    if (leftStat.minPrice !== rightStat.minPrice) {
+      return (leftStat.minPrice || Number.MAX_SAFE_INTEGER) - (rightStat.minPrice || Number.MAX_SAFE_INTEGER);
+    }
+    return left.worldName.localeCompare(right.worldName, "zh-CN");
   });
 
   if (!rows.length) {
