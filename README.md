@@ -1,25 +1,26 @@
 # FF14 物价百科 Web
 
-纯静态网页版，支持中文搜索、国服价格查询和国服 Wiki 外链。
+纯静态网页版本，支持中文搜索、国服价格查询和国服 Wiki 词条直达。
 
-## 特点
+## 主要功能
 
-- 纯静态文件，无需自建后端
+- 纯静态部署，无需自建后端
 - 本地双语映射表搜索
-- 直接查询 Universalis 和 XivAPI / CafeMaker
-- 支持 `全部 / HQ / 非 HQ` 价格查看
-- 搜索无结果时跳转国服 Wiki
+- 国服 Universalis 价格查询
+- `全部 / HQ / 非 HQ` 价格查看
+- 国服 Wiki 词条直达
+- 白天 / 黑夜主题切换
 
-## 目录
+## 最新更新
 
-```text
-ff14-web/
-  index.html
-  app.js
-  static-overrides.js
-  styles.css
-  data/item_mapping.min.json
-```
+2026-05-20
+
+- 同步桌面端已验证的前端实现到网页端
+- 修复物品详情中的国服 Wiki 跳转逻辑
+- 新增白天 / 黑夜主题切换，并记住用户上次选择
+- 修复 `HQ / 非 HQ` 模式下市场总览与世界服价格表的排序和统计表现
+- 修复首页和价格表中的乱码文案
+- 清理旧的重复前端覆盖逻辑
 
 ## 本地预览
 
@@ -36,4 +37,9 @@ http://127.0.0.1:8080
 
 ## 部署
 
-推荐直接部署到 GitHub Pages。具体步骤见 [DEPLOY.md](./DEPLOY.md)。
+推荐直接部署到 GitHub Pages，具体见 [DEPLOY.md](./DEPLOY.md)。
+
+## 说明
+
+- 这是纯静态站点，不包含独立后端
+- 更详细的本次上传说明见 [RELEASE_NOTES.md](./RELEASE_NOTES.md)
