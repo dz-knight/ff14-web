@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.0.5 - 2026-05-25
+
+- Added CN data-center filters for market prices: `陆行鸟`, `莫古力`, `猫小胖`, and `豆豆柴`
+- Added NPC shop source cards with vendor price, NPC name, map, and precise `X/Y` coordinates when available
+- Resolved shop NPCs from `GilShopItem` links through XIVAPI and supplemented missing NPC coordinates through Garland Tools search data
+- Hid unresolved or coordinate-less shop records from the NPC source list to avoid showing misleading `待确认 NPC` entries
+- Bumped static asset version parameters so GitHub Pages clients load the updated script
+
 ## v1.0.3 - 2026-05-12
 
 - Added `全部 / HQ / 非 HQ` market quality filters to the static web version
