@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.0.9 - 2026-08-13
+
+- Added fast local-first fuzzy suggestions for Chinese and English item names, including `秘银` -> `秘银矿`
+- Stopped fuzzy, quest-name, and duplicate-name searches from auto-opening a result; users now choose an entry with its entity ID visible
+- Isolated item and quest failures with independent fallbacks and capped CafeMaker search requests at four seconds
+- Prevented stale search and detail requests from replacing newer input or selections
+- Added deterministic search-ranking tests against the real bilingual item mapping
+
 ## v1.0.8 - 2026-06-09
 
 - Fixed newly added item icons by using the XIVAPI v2 asset endpoint when the legacy icon mirrors have not synced the image yet
@@ -31,7 +39,7 @@
 
 - Added `全部 / HQ / 非 HQ` market quality filters to the static web version
 - Split market summary and world price table statistics by selected quality mode
-- Kept the static web runtime on the `app.js + static-overrides.js` path while consolidating the latest market-quality overrides into the shared static override layer
+- At that release, kept the static web runtime on the `app.js + static-overrides.js` path while consolidating market-quality overrides; current releases load `app.js` directly
 - Bumped static asset version parameters again to force GitHub Pages clients onto the post-fix market-price scripts
 - Fixed sorting under `HQ / 非 HQ` mode so both the market summary and the world price table sort by the currently selected quality price
 
