@@ -1,5 +1,34 @@
 # FF14 物价百科 Web 更新说明
 
+## v1.1.0 - 2026-08-18
+
+本次更新新增国服实时招募查询，并完善第三方接口异常与快速切换条件时的容错。
+
+- 首页新增“查招募”入口，可查看当前国服招募列表
+- 支持按名称或描述搜索，并按陆行鸟、猫小胖、莫古力、豆豆柴和任务分类筛选
+- 支持本地分页、手动刷新、招募详情和返回列表
+- 特殊迷宫使用源站实际支持的 `V&C Dungeon Finder` 参数
+- 兼容 `FieldOperations` / `AdventuringForays` 等分类别名
+- 分页并发读取时按招募 ID 去重；部分分页失败会显示具体失败页
+- 使用 `AbortController` 与请求代次隔离，旧请求不会覆盖最新条件
+- 详情中的职业、目的、条件、战利品规则和类型均使用中文友好显示，未知值不直接暴露内部枚举
+
+### 数据源与限制
+
+- 市场价格继续由 Universalis 提供
+- 招募数据由 `https://xivpf.littlenightmare.top/api` 实时提供
+- 纯静态网页无法自定义请求 User-Agent；目前源站允许跨域访问，但未来策略变化时可能需要同源代理
+- “特殊迷宫探索”只显示当前仍有效且被源站归入该分类的招募；没有活跃招募时会显示空结果
+
+### 验证
+
+- `node --check party-finder.js`
+- `node tools/test-party-finder.js`
+- `node tools/test-search-ranking.js`
+- `node tools/test-market-calculations.js`
+- 桌面 `1280x720` 与移动端 `390x844` 浏览器流程验证
+- 实时 API 列表、详情、CORS、特殊迷宫和特殊场景分类烟测
+
 ## v1.0.9 - 2026-08-13
 
 本次更新重点优化中文模糊搜索，并降低 CafeMaker 故障对查询入口的影响。
