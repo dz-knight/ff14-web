@@ -18,14 +18,21 @@
 
 ## 最新更新
 
-2026-08-18
+2026-08-19
 
 - 新增“查招募”入口，实时读取国服招募列表，支持中文搜索、大区与分类筛选、分页、刷新和详情查看
 - 招募详情补齐目的、条件、战利品规则、类型、职业槽位和剩余时间等中文显示
 - 修正特殊迷宫分类参数为 `V&C Dungeon Finder`，并兼容 `FieldOperations` / `AdventuringForays` 等返回别名
 - 分页请求按批次并发读取并按招募 ID 去重；部分页面失败时会明确提示，不会把残缺数据显示为完整结果
 - 快速连续切换搜索或筛选条件时会取消旧请求，避免旧结果覆盖当前选择
+- 招募第一页返回后立即显示，其余页后台补充；刷新失败保留上次结果，并恢复当前页码、滚动位置和键盘焦点
+- 限制异常分页数量，避免错误或恶意响应触发无限后台请求
+- 所有远程 JSON 请求都有超时边界；Universalis 区服元数据暂时不可用时，物品与任务搜索仍可继续使用
+- 本地预览服务器只允许读取网页运行所需文件，并阻止编码路径穿越、符号链接逃逸和不支持的 HTTP 方法
 - 招募数据来自 Remote Party Finder 国服服务；纯网页无法自定义请求 User-Agent，源站策略变化时可能需要同源代理
+- 修复物品详情加载时引用失效变量的问题，并清理会覆盖 HQ / 非 HQ 逻辑的重复市场函数
+- 招募接口同时兼容 `data` / `listings` 返回字段和空分页；销售排行、自动刷新与快速切换区服均有竞态和失败保留测试
+- 图标代理按流限制为 5 MB，Wiki、图标和桌面解析跳转只接受预期的 HTTPS 地址
 
 2026-08-13
 
@@ -79,6 +86,18 @@ node tools/serve-static-utf8.js 4173
 
 ```text
 http://127.0.0.1:4173
+```
+
+## 本地验证
+
+```powershell
+node --check app.js
+node --check party-finder.js
+node tools/test-app-regressions.js
+node tools/test-static-server.js
+node tools/test-party-finder.js
+node tools/test-search-ranking.js
+node tools/test-market-calculations.js
 ```
 
 ## 部署
