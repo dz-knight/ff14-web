@@ -1,5 +1,25 @@
 # FF14 物价百科 Web 更新说明
 
+## v1.1.1 - 2026-08-23
+
+本次更新修复中文物品名称与国服 Wiki 页面标题之间的翻译和空格差异。
+
+- 增加 `第四期重建用的特供硅砂（检）` / `第四期重建用的特供硅沙（检）` 到本地别名映射，统一使用 Universalis 物品 ID `31999`
+- 本地别名优先走映射表，不再等待故障的 CafeMaker，价格查询继续由 Universalis 提供
+- Wiki 搜索统一清理零宽字符、全角空格和多余空格，并规范化括号前后的空格
+- 物品 Wiki 入口改为规范化 Wiki 搜索 URL，避免直接文章标题因空格差异失效
+- 增加 521 个括号名称和 39 个空白名称的批量回归覆盖
+
+### 验证
+
+- `node --check app.js`
+- `node tools/test-app-regressions.js`
+- `node tools/test-party-finder.js`
+- `node tools/test-search-ranking.js`
+- `node tools/test-market-calculations.js`
+- `node tools/test-static-server.js`
+- 本地浏览器验证 `黄铜头冠（日长石）` 与 `第四期重建用的特供硅砂（检）` 的 Wiki 搜索地址
+
 ## v1.1.0 - 2026-08-18
 
 本次更新新增国服实时招募查询，并完善第三方接口异常与快速切换条件时的容错。
